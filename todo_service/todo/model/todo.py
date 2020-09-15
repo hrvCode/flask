@@ -2,6 +2,7 @@ from marshmallow import fields, Schema
 from todo import db
 
 class Todo (db.Model):
+    __tablename__  = "task"
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.Text())
     owner = db.Column(db.String(255))
@@ -20,6 +21,12 @@ class Todo (db.Model):
     @classmethod
     def getTask(cls, id):
         return cls.query.get(id)
+
+    @classmethod
+    def getAllTasks(cls):
+        k = db.session.query(cls).all()
+        print(k)
+        return k
 
 
 class TodoSchema (Schema):
