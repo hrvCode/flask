@@ -3,7 +3,6 @@ from todo import db
 
 
 class User(db.Model):
-    # __tableName__: "User"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     todo = db.relationship('Todo', backref='creator', lazy=True)
@@ -11,6 +10,7 @@ class User(db.Model):
     def __init__(self, data):
         self.id = data.get('id')
         self.name = data.get('name')
+        self.todo = []
 
     def save(self):
         db.session.add(self)
@@ -19,12 +19,23 @@ class User(db.Model):
         return self.id
 
     @classmethod
-    def getUser(cls):
+    def get_user(cls):
         return cls.query.get(id)
+
+    def add_todo(self, todo_query):
+        todo = Todo(todo_query)
+        self.todo.append(todo)
+        db.session.commit()
+
+    @property
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+        }
 
 
 class Todo(db.Model):
-    # __tablename__  = "Todo"
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.Text(), nullable=False)
     owner = db.Column(db.String(225))
@@ -52,7 +63,7 @@ class Todo(db.Model):
             "id": self.id,
             "tsk": self.task,
             "owner": self.owner,
-            "creator": self.creator
+            "user_id": self.user_id
         }
 
 

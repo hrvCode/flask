@@ -2,19 +2,28 @@ from todo.model.todo import User, Todo
 from todo import db
 
 
-def remove_todo(todo_id):
-    todo = Todo.query.get(todo_id)
-    print(todo)
-    todo.query.filter(Todo.id == todo.id).delete()
-    db.session.commit()
-    return todo
-
-
 class UserService:
-    def __init__(self, creator_id):
-        self.user = User.query.get(creator_id)
 
-    def add_todo(self, data):
-        todo = Todo(data)
-        self.user.todo.append(todo)
-        db.session.commit()
+    @staticmethod
+    def add_user(user_data):
+        new_user = User(user_data)
+        return new_user.save();
+
+    @staticmethod
+    def remove_todo(data):
+        user = User.query.get(data['userId'])
+        delete_todo = Todo.query.get(data['todoId'])
+        if [delete_todo.id in user.todo == delete_todo.id]:
+            delete_todo.query.filter(Todo.id == delete_todo.id).delete()
+            db.session.commit()
+            return delete_todo
+
+    @staticmethod
+    def add_todo(data):
+        user = User.query.get(data['userId'])
+        user.add_todo(data)
+
+    @staticmethod
+    def get_all_todos_by_user(user_id):
+        user = User.query.get(user_id)
+        return user.todo
