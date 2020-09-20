@@ -1,4 +1,5 @@
 from todo.model.todo import User, Todo
+
 from todo import db
 
 
@@ -16,3 +17,8 @@ class TodoService:
     def add_todo(data):
         user = User.query.get(data['userId'])
         user.add_todo(data)
+
+    @staticmethod
+    def get_todo(todo_id):
+        todo = Todo.query.get(todo_id)
+        return todo.serialize

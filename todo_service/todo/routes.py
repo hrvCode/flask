@@ -3,6 +3,9 @@ from flask import make_response, request, jsonify
 from todo.model.todo import Todo, User
 from service.user_service import UserService
 from service.todo_service import TodoService
+from flask_cors import CORS
+
+CORS(app, resources=r'/api/*')
 
 
 @app.route('/', methods=['get'])
@@ -11,13 +14,13 @@ def index():
     return make_response('hello', 200)
 
 
-@app.route('/api/todo/', methods=['get'])
+@app.route('/api/todo', methods=['get'])
 def get_all():
     # get all todos
     return jsonify([i.serialize for i in Todo.query.all()])
 
 
-@app.route('/api/user/todo/<int:user_id>', methods=['get'])
+@app.route('/api/user/<int:user_id>/todo', methods=['get'])
 def get_all_todos_by_user(user_id):
     # get all todos from specific user
     todos = UserService.get_all_todos_by_user(user_id)
@@ -26,8 +29,8 @@ def get_all_todos_by_user(user_id):
 
 @app.route('/api/todo/<int:todo_id>', methods=['get'])
 def get_todo(todo_id):
-    # get todo
-    return f'todo id {todo_id}'
+    todo = TodoService.get_todo(todo_id)
+    return jsonify(todo)
 
 
 @app.route('/api/todo/', methods=['post'])
@@ -56,7 +59,6 @@ def delete_todo():
 
 
 # API USERS
-
 @app.route('/api/user', methods=['post'])
 def create_user():
     # create user
