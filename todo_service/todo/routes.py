@@ -26,7 +26,6 @@ def get_all_todos_by_user(user_id):
     todos = UserService.get_all_todos_by_user(user_id)
     return jsonify([todo.serialize for todo in todos])
 
-
 @app.route('/api/todo/<int:todo_id>', methods=['get'])
 def get_todo(todo_id):
     todo = TodoService.get_todo(todo_id)
@@ -59,6 +58,14 @@ def delete_todo():
 
 
 # API USERS
+
+
+@app.route('/api/user/<int:user_id>', methods=['get'])
+def get_user(user_id):
+    user = TodoService.get_user(user_id);
+    return make_response(jsonify(user), 200)
+
+
 @app.route('/api/user', methods=['post'])
 def create_user():
     # create user

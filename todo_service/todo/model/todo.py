@@ -39,13 +39,13 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.Text(), nullable=False)
     owner = db.Column(db.String(225))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __init__(self, data):
         self.id = data.get('id')
         self.task = data.get('task')
         self.owner = data.get('owner')
-        self.user_id = data.get('user_id')
+        self.user_id = data.get('user')
 
     def save(self):
         db.session.add(self)
@@ -54,8 +54,8 @@ class Todo(db.Model):
         return self.id
 
     @classmethod
-    def getTask(cls, id):
-        return cls.query.get(id)
+    def get_task(cls, task_id):
+        return cls.query.get(task_id)
 
     @property
     def serialize(self):

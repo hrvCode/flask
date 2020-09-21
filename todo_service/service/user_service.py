@@ -10,6 +10,11 @@ class UserService:
         return new_user.save();
 
     @staticmethod
+    def get_user(user_id):
+        user = User.query.get(user_id)
+        return user.serialize
+
+    @staticmethod
     def remove_todo(data):
         user = User.query.get(data['userId'])
         delete_todo = Todo.query.get(data['todoId'])
