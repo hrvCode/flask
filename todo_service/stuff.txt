@@ -1,0 +1,14 @@
+Routes:
+
+todos:
+get todo done,
+list todos done,
+update todo ?
+list todos from user done,
+
+delete todo done,
+get user done,
+list users ?
+update user ?
+delete user ?
+

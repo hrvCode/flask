@@ -26,10 +26,20 @@ def get_all_todos_by_user(user_id):
     todos = UserService.get_all_todos_by_user(user_id)
     return jsonify([todo.serialize for todo in todos])
 
+
 @app.route('/api/todo/<int:todo_id>', methods=['get'])
 def get_todo(todo_id):
-    todo = TodoService.get_todo(todo_id)
-    return jsonify(todo)
+
+    todo_service = TodoService
+    data = todo_service.get_todo(todo_service,todo_id)
+
+    if not todo_service.serialize:
+        return make_response(jsonify(None))
+    else:
+        return jsonify({
+            "user": data["user"].serialize,
+            "todos": [data["todo"].serialize]
+        })
 
 
 @app.route('/api/todo/', methods=['post'])
