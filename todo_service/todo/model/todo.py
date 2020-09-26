@@ -39,7 +39,7 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.Text(), nullable=False)
     owner = db.Column(db.String(225))
-    user_id= db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __init__(self, data):
         self.id = data.get('id')
@@ -65,7 +65,6 @@ class Todo(db.Model):
             "owner": self.owner,
             "user_id": self.user_id
         }
-
 
 
 class TodoSchema(Schema):

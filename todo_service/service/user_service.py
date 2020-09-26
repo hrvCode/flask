@@ -15,6 +15,11 @@ class UserService:
         return user.serialize
 
     @staticmethod
+    def get_all_user():
+        user = User.query.all()
+        return [u.serialize for u in user]
+
+    @staticmethod
     def remove_todo(data):
         user = User.query.get(data['userId'])
         delete_todo = Todo.query.get(data['todoId'])
@@ -24,11 +29,10 @@ class UserService:
             return delete_todo
 
     @staticmethod
-    def add_todo(data):
-        user = User.query.get(data['userId'])
-        user.add_todo(data)
-
-    @staticmethod
     def get_all_todos_by_user(user_id):
         user = User.query.get(user_id)
         return user.todo
+
+    @staticmethod
+    def delete_user(user_id):
+        return User.query.filter(User.id == user_id).delete()

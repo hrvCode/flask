@@ -29,11 +29,10 @@ def get_all_todos_by_user(user_id):
 
 @app.route('/api/todo/<int:todo_id>', methods=['get'])
 def get_todo(todo_id):
-
     todo_service = TodoService
-    data = todo_service.get_todo(todo_service,todo_id)
+    data = todo_service.get_todo(todo_service, todo_id)
 
-    if not todo_service.serialize:
+    if not data['todo'].serialize:
         return make_response(jsonify(None))
     else:
         return jsonify({
@@ -69,10 +68,15 @@ def delete_todo():
 
 # API USERS
 
+@app.route('/api/user/', methods=['get'])
+def get_all_users():
+    user = UserService.get_all_user()
+    return make_response(jsonify(user), 200)
 
-@app.route('/api/user/<int:user_id>', methods=['get'])
-def get_user(user_id):
-    user = TodoService.get_user(user_id);
+
+@app.route('/api/user/', methods=['get'])
+def get_user():
+    user = UserService.get_user(request.get_json()['userId'])
     return make_response(jsonify(user), 200)
 
 
@@ -83,3 +87,12 @@ def create_user():
         user_data = request.get_json()
         user_id = UserService.add_user(user_data)
         return make_response(f"you just made a user with id:{user_id}")
+
+
+@app.route('/api/user/', methods=['delete'])
+def delete_user():
+    # delete todo
+    if request.method == 'DELETE':
+        req = request.get_json()
+        user = UserService.delete_user(req['userId'])
+        return make_response(f'DELETED USER: {user}:', 200)
