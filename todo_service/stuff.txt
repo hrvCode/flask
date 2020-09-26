@@ -1,14 +1,15 @@
 Routes:
 
 todos:
-get todo done,
-list todos done,
-update todo ?
-list todos from user done,
+get todos: done,
+list todos: done,
+update todos: ?
+delete todos: done
+list todos from user: done,
 
 delete todo done,
-get user done,
-list users ?
+get user: done,
+list users: done
 update user ?
-delete user ?
+delete user: done
 
