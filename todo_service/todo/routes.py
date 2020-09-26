@@ -66,20 +66,26 @@ def delete_todo():
         todo = TodoService.remove_todo(req)
         return make_response(f'DELETED TODO: {todo.task}:', 200)
 
-
 # API USERS
 
 
 @app.route('/api/user/<int:user_id>', methods=['get'])
-def get_user(user_id):
-    user = TodoService.get_user(user_id);
-    return make_response(jsonify(user), 200)
+def get_update_delete_user(user_id):
+    if request.method == "GET":
+        user = UserService.get_user(user_id)
+        return make_response(jsonify(user), 200)
+    if request.method == "PUT":
+        pass
+
+    if request.method == "DELETE":
 
 
-@app.route('/api/user', methods=['post'])
-def create_user():
+@app.route('/api/user', methods=['post,delete'])
+def get_all_create_user():
     # create user
     if request.method == 'POST':
         user_data = request.get_json()
         user_id = UserService.add_user(user_data)
         return make_response(f"you just made a user with id:{user_id}")
+    if request.method == 'GET':
+        return [i.serialize for i in Todo.query.all()]

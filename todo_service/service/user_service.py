@@ -32,3 +32,9 @@ class UserService:
     def get_all_todos_by_user(user_id):
         user = User.query.get(user_id)
         return user.todo
+
+    @staticmethod
+    def delete_user(user_id):
+        return User.query.delete
+
+
