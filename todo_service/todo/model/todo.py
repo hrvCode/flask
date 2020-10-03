@@ -1,5 +1,6 @@
 from marshmallow import fields, Schema
 from todo import db
+from sqlalchemy.exc import IntegrityError
 
 
 class User(db.Model):
@@ -17,10 +18,15 @@ class User(db.Model):
         db.session.commit()
 
     def save(self):
-        db.session.add(self)
-        db.session.commit()
-
-        return self.id
+        try:
+            db.session.add(self)
+            db.session.commit()
+            return self.id
+        except IntegrityError:
+            db.session.rollback()
+            return {
+                "error": "user already exist"
+            }
 
     @classmethod
     def get_user(cls):
@@ -43,6 +49,7 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.Text(), nullable=False)
     owner = db.Column(db.String(225))
+    status = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __init__(self, data):
@@ -50,6 +57,7 @@ class Todo(db.Model):
         self.task = data.get('task')
         self.owner = data.get('owner')
         self.user_id = data.get('user')
+        self.status = data.get('status')
 
     def save(self):
         db.session.add(self)
@@ -67,7 +75,8 @@ class Todo(db.Model):
             "id": self.id,
             "task": self.task,
             "owner": self.owner,
-            "user_id": self.user_id
+            "status": self.status,
+            "creator": self.user_id
         }
 
 

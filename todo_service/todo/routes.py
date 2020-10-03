@@ -14,7 +14,7 @@ def index():
     return make_response('hello', 200)
 
 
-@app.route('/api/todo', methods=['get'])
+@app.route('/api/todo', methods=['get', 'post'])
 def get_all():
     if request.method == 'GET':
         # get all todos
@@ -71,7 +71,7 @@ def get_all_users():
     if request.method == 'POST':
         user_data = request.get_json()
         user_id = UserService.add_user(user_data)
-        return make_response(f"you just made a user with id:{user_id}", 200)
+        return make_response(f"{user_id}", 200)
 
 
 @app.route('/api/user/<int:user_id>', methods=['get', 'put', 'delete'])
